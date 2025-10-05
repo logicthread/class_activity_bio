@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integration Test - Universal Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .console-info {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .navigation-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .navigation-links a {
+            background: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .navigation-links a:hover {
+            background: #1e7e34;
+        }
+        .form-test {
+            display: grid;
+            gap: 10px;
+            max-width: 400px;
+        }
+        .form-test input, .form-test select, .form-test textarea {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Universal Tracking Integration Test</h1>
+    
+    <div class="console-info">
+        <strong>📋 Instructions:</strong>
+        <ol>
+            <li>Open your browser's Developer Console (F12)</li>
+            <li>Look for the tracking indicator (🔍) in the top-right corner</li>
+            <li>Click on various elements below to see tracking in action</li>
+            <li>Navigate to Q1-Q5 pages to test cross-page tracking</li>
+            <li>Use console commands: <code>getTrackingSummary()</code> and <code>exportUniversalTrackingData()</code></li>
+        </ol>
+    </div>
+
+    <div class="test-section">
+        <h2>Button Click Tests</h2>
+        <button class="test-button" id="test-btn-1">Test Button 1</button>
+        <button class="test-button" id="test-btn-2">Test Button 2</button>
+        <button class="test-button" id="test-btn-3">Test Button 3</button>
+        <button class="test-button" onclick="alert('Button clicked!')">Alert Button</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Form Interaction Tests</h2>
+        <div class="form-test">
+            <input type="text" id="test-input" placeholder="Type something...">
+            <select id="test-select">
+                <option value="">Choose option</option>
+                <option value="option1">Option 1</option>
+                <option value="option2">Option 2</option>
+            </select>
+            <textarea id="test-textarea" placeholder="Enter text here..." rows="3"></textarea>
+            <button type="button" class="test-button">Form Button</button>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Navigation Tests</h2>
+        <p>Click these links to test tracking across different pages:</p>
+        <div class="navigation-links">
+            <a href="../Q1/index.html">Q1 Page</a>
+            <a href="../Q2/newssd.html">Q2 News</a>
+            <a href="../Q3/index.html">Q3 Interactive</a>
+            <a href="../Q4/index.html">Q4 Game</a>
+            <a href="../Q5/index.html">Q5 Database</a>
+            <a href="index.html">Q6 Demo</a>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>Dynamic Content Tests</h2>
+        <button class="test-button" id="add-content">Add Dynamic Content</button>
+        <button class="test-button" id="remove-content">Remove Content</button>
+        <div id="dynamic-content"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Commands Test</h2>
+        <button class="test-button" onclick="console.log('Summary:', getTrackingSummary())">Get Summary</button>
+        <button class="test-button" onclick="exportUniversalTrackingData()">Export Data</button>
+        <button class="test-button" onclick="console.clear(); console.log('Console cleared - tracking continues...')">Clear Console</button>
+    </div>
+
+    <!-- Load the universal tracking script -->
+    <script src="universal-tracker.js"></script>
+    
+    <!-- Test-specific JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let contentCounter = 0;
+            
+            // Dynamic content addition
+            document.getElementById('add-content').addEventListener('click', function() {
+                contentCounter++;
+                const dynamicDiv = document.getElementById('dynamic-content');
+                const newElement = document.createElement('div');
+                newElement.innerHTML = `<p>Dynamic Content ${contentCounter} <button class="test-button" onclick="this.parentElement.remove()">Remove This</button></p>`;
+                newElement.style.cssText = 'background: #fff3cd; padding: 10px; margin: 5px 0; border-radius: 4px; border: 1px solid #ffeaa7;';
+                dynamicDiv.appendChild(newElement);
+            });
+            
+            // Dynamic content removal
+            document.getElementById('remove-content').addEventListener('click', function() {
+                const dynamicDiv = document.getElementById('dynamic-content');
+                if (dynamicDiv.children.length > 0) {
+                    dynamicDiv.removeChild(dynamicDiv.lastElementChild);
+                }
+            });
+            
+            // Add some interactive behavior
+            document.querySelectorAll('.test-button').forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+            
+            console.log('🧪 Integration test page loaded!');
+            console.log('💡 Try clicking elements and check the console for tracking data.');
+        });
+    </script>
+</body>
+</html>
