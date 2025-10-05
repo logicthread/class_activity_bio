@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Tracking System - Q6 Demo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔍 User Tracking System Demo</h1>
+            <p>This page demonstrates comprehensive user interaction tracking. Open your browser's console to see detailed tracking information.</p>
+        </header>
+
+        <nav class="navigation">
+            <ul>
+                <li><a href="#section1" id="nav-section1">Section 1</a></li>
+                <li><a href="#section2" id="nav-section2">Section 2</a></li>
+                <li><a href="#section3" id="nav-section3">Section 3</a></li>
+                <li><a href="../Q1/index.html" id="nav-q1">Q1 Demo</a></li>
+                <li><a href="../Q2/newssd.html" id="nav-q2">Q2 Demo</a></li>
+                <li><a href="../Q3/index.html" id="nav-q3">Q3 Demo</a></li>
+                <li><a href="../Q4/index.html" id="nav-q4">Q4 Demo</a></li>
+                <li><a href="../Q5/index.html" id="nav-q5">Q5 Demo</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="section1" class="demo-section">
+                <h2>Interactive Elements Demo</h2>
+                <div class="button-group">
+                    <button id="primary-btn" class="btn primary">Primary Button</button>
+                    <button id="secondary-btn" class="btn secondary">Secondary Button</button>
+                    <button id="danger-btn" class="btn danger">Danger Button</button>
+                </div>
+
+                <div class="form-demo">
+                    <h3>Form Elements</h3>
+                    <form id="demo-form">
+                        <div class="form-group">
+                            <label for="text-input">Text Input:</label>
+                            <input type="text" id="text-input" name="textInput" placeholder="Type something...">
+                        </div>
+                        <div class="form-group">
+                            <label for="email-input">Email Input:</label>
+                            <input type="email" id="email-input" name="emailInput" placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="select-input">Select Dropdown:</label>
+                            <select id="select-input" name="selectInput">
+                                <option value="">Choose an option</option>
+                                <option value="option1">Option 1</option>
+                                <option value="option2">Option 2</option>
+                                <option value="option3">Option 3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="textarea-input">Textarea:</label>
+                            <textarea id="textarea-input" name="textareaInput" rows="4" placeholder="Enter your message..."></textarea>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <label>
+                                <input type="checkbox" id="checkbox1" name="checkbox1" value="check1">
+                                Checkbox Option 1
+                            </label>
+                            <label>
+                                <input type="checkbox" id="checkbox2" name="checkbox2" value="check2">
+                                Checkbox Option 2
+                            </label>
+                        </div>
+                        <div class="form-group radio-group">
+                            <label>
+                                <input type="radio" id="radio1" name="radioGroup" value="radio1">
+                                Radio Option 1
+                            </label>
+                            <label>
+                                <input type="radio" id="radio2" name="radioGroup" value="radio2">
+                                Radio Option 2
+                            </label>
+                        </div>
+                        <button type="submit" id="submit-btn" class="btn primary">Submit Form</button>
+                    </form>
+                </div>
+            </section>
+
+            <section id="section2" class="demo-section">
+                <h2>CSS Animation & Interaction Demo</h2>
+                <div class="animation-demo">
+                    <div class="animated-box" id="animated-box">
+                        <p>Click me for animation!</p>
+                    </div>
+                    <div class="hover-effects">
+                        <div class="hover-card" data-card="1">Hover Card 1</div>
+                        <div class="hover-card" data-card="2">Hover Card 2</div>
+                        <div class="hover-card" data-card="3">Hover Card 3</div>
+                    </div>
+                </div>
+
+                <div class="interactive-elements">
+                    <h3>Various Interactive Elements</h3>
+                    <div class="element-grid">
+                        <div class="grid-item clickable" data-item="1">Grid Item 1</div>
+                        <div class="grid-item clickable" data-item="2">Grid Item 2</div>
+                        <div class="grid-item clickable" data-item="3">Grid Item 3</div>
+                        <div class="grid-item clickable" data-item="4">Grid Item 4</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="section3" class="demo-section">
+                <h2>Media & Content Demo</h2>
+                <div class="media-demo">
+                    <div class="image-gallery">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSAxPC90ZXh0Pjwvc3ZnPg==" alt="Demo Image 1" class="gallery-image" id="image1">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjYmJiIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMTgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5JbWFnZSAyPC90ZXh0Pjwvc3ZnPg==" alt="Demo Image 2" class="gallery-image" id="image2">
+                    </div>
+
+                    <div class="content-blocks">
+                        <article class="content-block" id="article1">
+                            <h4>Article 1</h4>
+                            <p>This is a sample article with clickable content. Click anywhere on this article to see tracking in action.</p>
+                        </article>
+                        <article class="content-block" id="article2">
+                            <h4>Article 2</h4>
+                            <p>Another sample article demonstrating content interaction tracking. Every click is monitored and logged.</p>
+                        </article>
+                    </div>
+                </div>
+
+                <div class="list-demo">
+                    <h3>List Elements</h3>
+                    <ul class="demo-list">
+                        <li class="list-item" data-value="item1">List Item 1</li>
+                        <li class="list-item" data-value="item2">List Item 2</li>
+                        <li class="list-item" data-value="item3">List Item 3</li>
+                        <li class="list-item" data-value="item4">List Item 4</li>
+                    </ul>
+                </div>
+            </section>
+        </main>
+
+        <aside class="tracking-controls">
+            <h3>Tracking Controls</h3>
+            <div class="control-buttons">
+                <button id="export-data" class="btn secondary">Export Tracking Data</button>
+                <button id="generate-report" class="btn secondary">Generate Report</button>
+                <button id="clear-console" class="btn secondary">Clear Console</button>
+            </div>
+            <div class="tracking-info">
+                <p><strong>Instructions:</strong></p>
+                <ul>
+                    <li>Open your browser's Developer Console (F12)</li>
+                    <li>Click on any element to see detailed tracking information</li>
+                    <li>Try different interactions: hover, form input, scrolling</li>
+                    <li>Use the control buttons to export data or generate reports</li>
+                </ul>
+            </div>
+        </aside>
+
+        <footer>
+            <p>© 2024 User Tracking System Demo - Q6 Implementation</p>
+            <p>All interactions on this page are being tracked and logged to the console.</p>
+        </footer>
+    </div>
+
+    <!-- Load the tracking script -->
+    <script src="user-tracking.js"></script>
+    
+    <!-- Demo-specific JavaScript -->
+    <script>
+        // Wait for the tracker to initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add demo-specific event handlers
+            
+            // Animated box click handler
+            const animatedBox = document.getElementById('animated-box');
+            animatedBox.addEventListener('click', function() {
+                this.classList.toggle('animate');
+                setTimeout(() => {
+                    this.classList.remove('animate');
+                }, 1000);
+            });
+
+            // Export data button
+            document.getElementById('export-data').addEventListener('click', function() {
+                if (window.exportTrackingData) {
+                    window.exportTrackingData();
+                }
+            });
+
+            // Generate report button
+            document.getElementById('generate-report').addEventListener('click', function() {
+                if (window.userTracker) {
+                    window.userTracker.generateSummaryReport();
+                }
+            });
+
+            // Clear console button
+            document.getElementById('clear-console').addEventListener('click', function() {
+                console.clear();
+                console.log('🧹 Console cleared - tracking continues...');
+            });
+
+            // Form submission handler
+            document.getElementById('demo-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Form submitted! Check console for tracking data.');
+            });
+
+            // Add some dynamic content changes for CSS tracking
+            setInterval(() => {
+                const cards = document.querySelectorAll('.hover-card');
+                cards.forEach(card => {
+                    if (Math.random() > 0.8) {
+                        card.style.backgroundColor = `hsl(${Math.random() * 360}, 70%, 80%)`;
+                        setTimeout(() => {
+                            card.style.backgroundColor = '';
+                        }, 2000);
+                    }
+                });
+            }, 5000);
+
+            console.log('🎯 Demo page loaded! Start interacting with elements to see tracking in action.');
+            console.log('💡 Tip: Try clicking buttons, filling forms, hovering over elements, and scrolling.');
+        });
+    </script>
+</body>
+</html>

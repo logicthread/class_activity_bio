@@ -1,0 +1,573 @@
+/* CSS Reset and base styles for consistent rendering across browsers */
+* {
+    /* Remove default margin from all elements */
+    margin: 0;
+    /* Remove default padding from all elements */
+    padding: 0;
+    /* Include padding and border in element's total width and height */
+    box-sizing: border-box;
+}
+
+/* Body styling for the entire page */
+body {
+    /* Set font family with fallbacks for better compatibility */
+    font-family: 'Arial', sans-serif;
+    /* Set background color to a light gray */
+    background-color: #f0f0f0;
+    /* Set text color to dark gray */
+    color: #333;
+    /* Set line height for better readability */
+    line-height: 1.6;
+    /* Add padding to prevent content from touching edges */
+    padding: 20px;
+}
+
+/* Main container styling to center and constrain content */
+.container {
+    /* Set maximum width to prevent content from being too wide */
+    max-width: 1200px;
+    /* Center the container horizontally */
+    margin: 0 auto;
+    /* Add white background for contrast */
+    background: white;
+    /* Add rounded corners for modern appearance */
+    border-radius: 10px;
+    /* Add subtle shadow for depth */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Add padding inside the container */
+    padding: 30px;
+}
+
+/* Header section styling */
+header {
+    /* Center align all text in header */
+    text-align: center;
+    /* Add bottom margin for spacing */
+    margin-bottom: 30px;
+}
+
+/* Main heading styling */
+header h1 {
+    /* Set large font size for prominence */
+    font-size: 2.5em;
+    /* Set color to dark blue */
+    color: #2c3e50;
+    /* Add bottom margin for spacing */
+    margin-bottom: 10px;
+}
+
+/* Subtitle styling */
+header h2 {
+    /* Set medium font size */
+    font-size: 1.5em;
+    /* Set color to medium gray */
+    color: #7f8c8d;
+    /* Add bottom margin for spacing */
+    margin-bottom: 15px;
+}
+
+/* Header paragraph styling */
+header p {
+    /* Set font size slightly larger than default */
+    font-size: 1.1em;
+    /* Set color to dark gray */
+    color: #555;
+}
+
+/* Game board container styling */
+.game-board {
+    /* Add top and bottom margin for spacing */
+    margin: 40px 0;
+    /* Center align content */
+    text-align: center;
+}
+
+/* Intersection visual styling */
+.intersection {
+    /* Use relative positioning for child element positioning */
+    position: relative;
+    /* Set width and height to create a square */
+    width: 400px;
+    height: 400px;
+    /* Add light gray background to represent road */
+    background: #ddd;
+    /* Center the intersection horizontally */
+    margin: 0 auto;
+    /* Add border for definition */
+    border: 3px solid #333;
+    /* Add rounded corners */
+    border-radius: 10px;
+    /* Create road lines using CSS gradients */
+    background-image: 
+        /* Horizontal road line */
+        linear-gradient(to right, transparent 45%, #fff 45%, #fff 55%, transparent 55%),
+        /* Vertical road line */
+        linear-gradient(to bottom, transparent 45%, #fff 45%, #fff 55%, transparent 55%);
+}
+
+/* Player car styling */
+.player {
+    /* Use absolute positioning for precise placement */
+    position: absolute;
+    /* Set width and height for car representation */
+    width: 80px;
+    height: 80px;
+    /* Center align text content */
+    text-align: center;
+    /* Use flexbox for vertical centering */
+    display: flex;
+    /* Stack items vertically */
+    flex-direction: column;
+    /* Center items vertically */
+    justify-content: center;
+    /* Center items horizontally */
+    align-items: center;
+    /* Add rounded corners */
+    border-radius: 10px;
+    /* Add transition for smooth animations */
+    transition: all 0.3s ease;
+}
+
+/* Player 1 positioning (coming from left) */
+.player1 {
+    /* Position from top */
+    top: 160px;
+    /* Position from left */
+    left: 50px;
+    /* Set background color to light blue */
+    background: rgba(52, 152, 219, 0.2);
+}
+
+/* Player 2 positioning (coming from bottom) */
+.player2 {
+    /* Position from top */
+    top: 270px;
+    /* Position from left */
+    left: 160px;
+    /* Set background color to light green */
+    background: rgba(46, 204, 113, 0.2);
+}
+
+/* Car emoji styling */
+.car {
+    /* Set large font size for visibility */
+    font-size: 2em;
+    /* Add bottom margin for spacing */
+    margin-bottom: 5px;
+}
+
+/* Player label styling */
+.player-label {
+    /* Set small font size */
+    font-size: 0.8em;
+    /* Set font weight to bold */
+    font-weight: bold;
+    /* Set text color to dark gray */
+    color: #333;
+}
+
+/* Traffic light container styling */
+.traffic-light {
+    /* Use absolute positioning */
+    position: absolute;
+    /* Position from top */
+    top: 20px;
+    /* Position from right */
+    right: 20px;
+    /* Set width for traffic light */
+    width: 60px;
+    /* Set height for traffic light */
+    height: 180px;
+    /* Set background color to dark gray */
+    background: #333;
+    /* Add rounded corners */
+    border-radius: 30px;
+    /* Add padding inside */
+    padding: 10px;
+    /* Use flexbox for layout */
+    display: flex;
+    /* Stack lights vertically */
+    flex-direction: column;
+    /* Space lights evenly */
+    justify-content: space-around;
+    /* Center lights horizontally */
+    align-items: center;
+}
+
+/* Individual light styling */
+.light {
+    /* Set width and height to create circles */
+    width: 35px;
+    height: 35px;
+    /* Make lights circular */
+    border-radius: 50%;
+    /* Set default background to dark gray */
+    background: #555;
+    /* Add transition for smooth color changes */
+    transition: background-color 0.3s ease;
+}
+
+/* Red light active state */
+.light.red.active {
+    /* Set background to bright red */
+    background: #e74c3c;
+    /* Add glowing effect */
+    box-shadow: 0 0 20px #e74c3c;
+}
+
+/* Yellow light active state */
+.light.yellow.active {
+    /* Set background to bright yellow */
+    background: #f1c40f;
+    /* Add glowing effect */
+    box-shadow: 0 0 20px #f1c40f;
+}
+
+/* Green light active state */
+.light.green.active {
+    /* Set background to bright green */
+    background: #27ae60;
+    /* Add glowing effect */
+    box-shadow: 0 0 20px #27ae60;
+}
+
+/* Controls section styling */
+.controls {
+    /* Center align content */
+    text-align: center;
+    /* Add top and bottom margin */
+    margin: 30px 0;
+}
+
+/* Player controls container styling */
+.player-controls {
+    /* Add bottom margin for spacing */
+    margin-bottom: 20px;
+}
+
+/* Player controls heading styling */
+.player-controls h3 {
+    /* Add bottom margin for spacing */
+    margin-bottom: 15px;
+    /* Set color to dark blue */
+    color: #2c3e50;
+}
+
+/* Action button base styling */
+.action-btn {
+    /* Add padding for better click area */
+    padding: 15px 30px;
+    /* Set font size */
+    font-size: 1.2em;
+    /* Set font weight to bold */
+    font-weight: bold;
+    /* Remove default border */
+    border: none;
+    /* Add rounded corners */
+    border-radius: 8px;
+    /* Change cursor to pointer on hover */
+    cursor: pointer;
+    /* Add margin for spacing between buttons */
+    margin: 0 10px;
+    /* Add transition for smooth hover effects */
+    transition: all 0.3s ease;
+    /* Transform text to uppercase */
+    text-transform: uppercase;
+}
+
+/* Go button specific styling */
+.action-btn.go {
+    /* Set background color to green */
+    background: #27ae60;
+    /* Set text color to white */
+    color: white;
+}
+
+/* Go button hover effect */
+.action-btn.go:hover {
+    /* Darken background on hover */
+    background: #219a52;
+    /* Slightly scale up button */
+    transform: translateY(-2px);
+    /* Add shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Stop button specific styling */
+.action-btn.stop {
+    /* Set background color to red */
+    background: #e74c3c;
+    /* Set text color to white */
+    color: white;
+}
+
+/* Stop button hover effect */
+.action-btn.stop:hover {
+    /* Darken background on hover */
+    background: #c0392b;
+    /* Slightly scale up button */
+    transform: translateY(-2px);
+    /* Add shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* New round button styling */
+.new-round-btn {
+    /* Add padding for better click area */
+    padding: 12px 25px;
+    /* Set font size */
+    font-size: 1em;
+    /* Set font weight to bold */
+    font-weight: bold;
+    /* Set background color to blue */
+    background: #3498db;
+    /* Set text color to white */
+    color: white;
+    /* Remove default border */
+    border: none;
+    /* Add rounded corners */
+    border-radius: 6px;
+    /* Change cursor to pointer */
+    cursor: pointer;
+    /* Add transition for hover effects */
+    transition: all 0.3s ease;
+}
+
+/* New round button hover effect */
+.new-round-btn:hover {
+    /* Darken background on hover */
+    background: #2980b9;
+    /* Slightly scale up button */
+    transform: translateY(-2px);
+    /* Add shadow for depth */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Game information section styling */
+.game-info {
+    /* Use flexbox for layout */
+    display: flex;
+    /* Wrap items to new line if needed */
+    flex-wrap: wrap;
+    /* Space items evenly */
+    justify-content: space-around;
+    /* Add top and bottom margin */
+    margin: 30px 0;
+    /* Add gap between flex items */
+    gap: 20px;
+}
+
+/* Round information styling */
+.round-info {
+    /* Set minimum width */
+    min-width: 200px;
+}
+
+/* Round info heading styling */
+.round-info h3 {
+    /* Set color to dark blue */
+    color: #2c3e50;
+    /* Add bottom margin */
+    margin-bottom: 10px;
+}
+
+/* Round info paragraph styling */
+.round-info p {
+    /* Add bottom margin */
+    margin-bottom: 5px;
+}
+
+/* Payoff matrix container styling */
+.payoff-matrix {
+    /* Set minimum width */
+    min-width: 300px;
+}
+
+/* Payoff matrix heading styling */
+.payoff-matrix h3 {
+    /* Set color to dark blue */
+    color: #2c3e50;
+    /* Add bottom margin */
+    margin-bottom: 15px;
+}
+
+/* Payoff matrix table styling */
+.payoff-matrix table {
+    /* Set table width to full container */
+    width: 100%;
+    /* Collapse table borders */
+    border-collapse: collapse;
+    /* Add margin for centering */
+    margin: 0 auto;
+}
+
+/* Table header and data cell styling */
+.payoff-matrix th,
+.payoff-matrix td {
+    /* Add padding inside cells */
+    padding: 10px;
+    /* Add border around cells */
+    border: 1px solid #ddd;
+    /* Center align text */
+    text-align: center;
+}
+
+/* Table header specific styling */
+.payoff-matrix th {
+    /* Set background color to light gray */
+    background: #f8f9fa;
+    /* Set font weight to bold */
+    font-weight: bold;
+}
+
+/* Collision cell highlighting */
+.payoff-matrix .collision {
+    /* Set background color to light red */
+    background: #ffebee;
+    /* Set text color to dark red */
+    color: #c62828;
+    /* Set font weight to bold */
+    font-weight: bold;
+}
+
+/* Results section styling */
+.results {
+    /* Center align text */
+    text-align: center;
+    /* Add top and bottom margin */
+    margin: 30px 0;
+    /* Add padding inside */
+    padding: 20px;
+    /* Set background color to light blue */
+    background: #ecf0f1;
+    /* Add rounded corners */
+    border-radius: 8px;
+}
+
+/* Results heading styling */
+.results h3 {
+    /* Set color to dark blue */
+    color: #2c3e50;
+    /* Add bottom margin */
+    margin-bottom: 15px;
+}
+
+/* Results text styling */
+.results p {
+    /* Set font size */
+    font-size: 1.1em;
+    /* Add bottom margin */
+    margin-bottom: 10px;
+}
+
+/* Scores section styling */
+.scores {
+    /* Center align text */
+    text-align: center;
+    /* Add top and bottom margin */
+    margin: 20px 0;
+}
+
+/* Scores heading styling */
+.scores h3 {
+    /* Set color to dark blue */
+    color: #2c3e50;
+    /* Add bottom margin */
+    margin-bottom: 15px;
+}
+
+/* Score paragraph styling */
+.scores p {
+    /* Set font size */
+    font-size: 1.1em;
+    /* Add bottom margin */
+    margin-bottom: 8px;
+    /* Set font weight to bold */
+    font-weight: bold;
+}
+
+/* Nash equilibrium explanation styling */
+.nash-explanation {
+    /* Add top and bottom margin */
+    margin: 30px 0;
+    /* Add padding inside */
+    padding: 20px;
+    /* Set background color to light yellow */
+    background: #fff9c4;
+    /* Add rounded corners */
+    border-radius: 8px;
+    /* Add left border for emphasis */
+    border-left: 4px solid #f1c40f;
+}
+
+/* Nash explanation heading styling */
+.nash-explanation h3 {
+    /* Set color to dark orange */
+    color: #e67e22;
+    /* Add bottom margin */
+    margin-bottom: 15px;
+}
+
+/* Nash explanation paragraph styling */
+.nash-explanation p {
+    /* Add bottom margin */
+    margin-bottom: 10px;
+}
+
+/* Nash explanation list styling */
+.nash-explanation ul {
+    /* Add left margin for indentation */
+    margin-left: 20px;
+    /* Add bottom margin */
+    margin-bottom: 15px;
+}
+
+/* Nash explanation list item styling */
+.nash-explanation li {
+    /* Add bottom margin */
+    margin-bottom: 8px;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    /* Reduce container padding on mobile */
+    .container {
+        padding: 20px;
+    }
+    
+    /* Reduce main heading size on mobile */
+    header h1 {
+        font-size: 2em;
+    }
+    
+    /* Reduce intersection size on mobile */
+    .intersection {
+        width: 300px;
+        height: 300px;
+    }
+    
+    /* Adjust player positions for smaller intersection */
+    .player1 {
+        top: 110px;
+        left: 30px;
+    }
+    
+    /* Adjust player positions for smaller intersection */
+    .player2 {
+        top: 190px;
+        left: 110px;
+    }
+    
+    /* Stack game info vertically on mobile */
+    .game-info {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    /* Reduce action button size on mobile */
+    .action-btn {
+        padding: 12px 20px;
+        font-size: 1em;
+        margin: 5px;
+    }
+}

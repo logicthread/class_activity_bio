@@ -1,0 +1,162 @@
+{
+  "database": "ecommerce_complete",
+  "description": "Complete e-commerce database schema with all relationships",
+  "version": "1.0",
+  "created_date": "2024-01-15",
+  "tables": [
+    {
+      "name": "users",
+      "type": "table",
+      "description": "Customer and user account information",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "nullable": false,
+          "primary_key": true,
+          "auto_increment": true,
+          "description": "Unique user identifier"
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "unique": true,
+          "description": "User email address (unique)"
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "description": "User first name"
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "description": "User last name"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "description": "Account creation timestamp"
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "type": "table",
+      "description": "Product categories",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "nullable": false,
+          "primary_key": true,
+          "auto_increment": true,
+          "description": "Unique category identifier"
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "description": "Category name"
+        }
+      ]
+    },
+    {
+      "name": "products",
+      "type": "table",
+      "description": "Product catalog",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "nullable": false,
+          "primary_key": true,
+          "auto_increment": true,
+          "description": "Unique product identifier"
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "description": "Product name"
+        },
+        {
+          "name": "price",
+          "type": "DECIMAL(10,2)",
+          "nullable": false,
+          "description": "Product price"
+        },
+        {
+          "name": "category_id",
+          "type": "INT",
+          "nullable": false,
+          "foreign_key": true,
+          "description": "Reference to category"
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "type": "table",
+      "description": "Customer orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "nullable": false,
+          "primary_key": true,
+          "auto_increment": true,
+          "description": "Unique order identifier"
+        },
+        {
+          "name": "user_id",
+          "type": "INT",
+          "nullable": false,
+          "foreign_key": true,
+          "description": "Reference to customer"
+        },
+        {
+          "name": "total_amount",
+          "type": "DECIMAL(10,2)",
+          "nullable": false,
+          "description": "Order total amount"
+        },
+        {
+          "name": "status",
+          "type": "ENUM('pending','processing','shipped','delivered')",
+          "nullable": false,
+          "default": "pending",
+          "description": "Order status"
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": false,
+          "default": "CURRENT_TIMESTAMP",
+          "description": "Order creation timestamp"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from_table": "orders",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "type": "foreign_key"
+    },
+    {
+      "from_table": "products",
+      "from_column": "category_id",
+      "to_table": "categories",
+      "to_column": "id",
+      "type": "foreign_key"
+    }
+  ]
+}

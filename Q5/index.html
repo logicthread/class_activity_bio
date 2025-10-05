@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Data Dictionary Tool</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- External libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 Database Data Dictionary Tool</h1>
+            <p>Generate interactive table relationship diagrams and comprehensive data dictionaries from your database schema</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-button active" data-tab="input">📥 Input Schema</button>
+            <button class="tab-button" data-tab="diagram">🔗 Relationship Diagram</button>
+            <button class="tab-button" data-tab="dictionary">📚 Data Dictionary</button>
+            <button class="tab-button" data-tab="export">📤 Export</button>
+            <button class="tab-button" data-tab="help">❓ Help</button>
+        </nav>
+
+        <!-- Input Schema Tab -->
+        <div id="input" class="tab-content active">
+            <div class="input-section">
+                <h2>Schema Input</h2>
+                <div class="input-methods">
+                    <div class="input-method">
+                        <h3>📁 Upload Schema File</h3>
+                        <input type="file" id="fileInput" accept=".json,.xml,.sql" />
+                        <div class="file-info">
+                            <small>Supported formats: JSON, XML, SQL DDL</small>
+                        </div>
+                    </div>
+                    
+                    <div class="input-method">
+                        <h3>✏️ Manual Input</h3>
+                        <div class="format-selector">
+                            <label>
+                                <input type="radio" name="format" value="json" checked> JSON
+                            </label>
+                            <label>
+                                <input type="radio" name="format" value="xml"> XML
+                            </label>
+                        </div>
+                        <textarea id="schemaInput" placeholder="Paste your schema definition here..."></textarea>
+                        <div class="input-actions">
+                            <button id="parseSchema" class="btn primary">Parse Schema</button>
+                            <button id="loadSample" class="btn secondary">Load Sample</button>
+                            <button id="clearInput" class="btn secondary">Clear</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="parseStatus" class="status-message"></div>
+                
+                <div id="schemaPreview" class="schema-preview">
+                    <h3>Schema Summary</h3>
+                    <div id="schemaSummary"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relationship Diagram Tab -->
+        <div id="diagram" class="tab-content">
+            <div class="diagram-section">
+                <h2>Table Relationship Diagram</h2>
+                <div class="diagram-controls">
+                    <div class="control-group">
+                        <label>Layout:</label>
+                        <select id="layoutType">
+                            <option value="force">Force-directed</option>
+                            <option value="hierarchical">Hierarchical</option>
+                            <option value="circular">Circular</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label>Show:</label>
+                        <label><input type="checkbox" id="showColumns" checked> Column Names</label>
+                        <label><input type="checkbox" id="showTypes" checked> Data Types</label>
+                        <label><input type="checkbox" id="showKeys" checked> Keys</label>
+                    </div>
+                    <button id="refreshDiagram" class="btn primary">Refresh Diagram</button>
+                </div>
+                <div id="diagramContainer" class="diagram-container">
+                    <div class="diagram-placeholder">
+                        <p>📊 Load a schema to generate the relationship diagram</p>
+                    </div>
+                </div>
+                <div class="diagram-legend">
+                    <h4>Legend</h4>
+                    <div class="legend-items">
+                        <div class="legend-item">
+                            <div class="legend-symbol primary-key"></div>
+                            <span>Primary Key</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-symbol foreign-key"></div>
+                            <span>Foreign Key</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-symbol relationship-line"></div>
+                            <span>Relationship</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Dictionary Tab -->
+        <div id="dictionary" class="tab-content">
+            <div class="dictionary-section">
+                <h2>Data Dictionary</h2>
+                <div class="dictionary-controls">
+                    <input type="text" id="searchTables" placeholder="🔍 Search tables..." />
+                    <select id="filterByType">
+                        <option value="">All Tables</option>
+                        <option value="table">Tables</option>
+                        <option value="view">Views</option>
+                    </select>
+                </div>
+                <div id="dictionaryContent" class="dictionary-content">
+                    <div class="dictionary-placeholder">
+                        <p>📚 Load a schema to generate the data dictionary</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Tab -->
+        <div id="export" class="tab-content">
+            <div class="export-section">
+                <h2>Export Options</h2>
+                <div class="export-options">
+                    <div class="export-option">
+                        <h3>📄 HTML Report</h3>
+                        <p>Generate a complete HTML report with interactive features</p>
+                        <button id="exportHTML" class="btn primary">Export HTML</button>
+                    </div>
+                    <div class="export-option">
+                        <h3>📑 PDF Document</h3>
+                        <p>Create a PDF document with diagrams and dictionary</p>
+                        <button id="exportPDF" class="btn primary">Export PDF</button>
+                    </div>
+                    <div class="export-option">
+                        <h3>🖼️ Diagram Image</h3>
+                        <p>Save the relationship diagram as PNG image</p>
+                        <button id="exportImage" class="btn primary">Export PNG</button>
+                    </div>
+                    <div class="export-option">
+                        <h3>📊 JSON Schema</h3>
+                        <p>Export the processed schema as JSON</p>
+                        <button id="exportJSON" class="btn primary">Export JSON</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Tab -->
+        <div id="help" class="tab-content">
+            <div class="help-section">
+                <h2>How to Use This Tool</h2>
+                
+                <div class="help-content">
+                    <section class="help-section-item">
+                        <h3>🚀 Getting Started</h3>
+                        <ol>
+                            <li>Prepare your database schema in JSON or XML format</li>
+                            <li>Upload the file or paste the content in the Input Schema tab</li>
+                            <li>Click "Parse Schema" to process your data</li>
+                            <li>Navigate to other tabs to view diagrams and dictionary</li>
+                            <li>Export your results in various formats</li>
+                        </ol>
+                    </section>
+
+                    <section class="help-section-item">
+                        <h3>📋 Generating Schema from Your Database</h3>
+                        
+                        <h4>MySQL</h4>
+                        <pre><code>-- Export schema information
+SELECT 
+    TABLE_NAME,
+    COLUMN_NAME,
+    DATA_TYPE,
+    IS_NULLABLE,
+    COLUMN_KEY,
+    COLUMN_DEFAULT,
+    EXTRA
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_SCHEMA = 'your_database_name'
+ORDER BY TABLE_NAME, ORDINAL_POSITION;</code></pre>
+
+                        <h4>PostgreSQL</h4>
+                        <pre><code>-- Export schema information
+SELECT 
+    table_name,
+    column_name,
+    data_type,
+    is_nullable,
+    column_default
+FROM information_schema.columns 
+WHERE table_schema = 'public'
+ORDER BY table_name, ordinal_position;</code></pre>
+
+                        <h4>SQL Server</h4>
+                        <pre><code>-- Export schema information
+SELECT 
+    t.TABLE_NAME,
+    c.COLUMN_NAME,
+    c.DATA_TYPE,
+    c.IS_NULLABLE,
+    c.COLUMN_DEFAULT
+FROM INFORMATION_SCHEMA.TABLES t
+JOIN INFORMATION_SCHEMA.COLUMNS c ON t.TABLE_NAME = c.TABLE_NAME
+WHERE t.TABLE_SCHEMA = 'dbo'
+ORDER BY t.TABLE_NAME, c.ORDINAL_POSITION;</code></pre>
+                    </section>
+
+                    <section class="help-section-item">
+                        <h3>📝 Schema Format Examples</h3>
+                        
+                        <h4>JSON Format</h4>
+                        <pre><code>{
+  "database": "sample_db",
+  "tables": [
+    {
+      "name": "users",
+      "type": "table",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "nullable": false,
+          "primary_key": true,
+          "auto_increment": true
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(255)",
+          "nullable": false,
+          "unique": true
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from_table": "orders",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "type": "foreign_key"
+    }
+  ]
+}</code></pre>
+
+                        <h4>XML Format</h4>
+                        <pre><code><database name="sample_db">
+  <tables>
+    <table name="users" type="table">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" />
+        <column name="email" type="VARCHAR(255)" nullable="false" unique="true" />
+      </columns>
+    </table>
+  </tables>
+  <relationships>
+    <relationship from_table="orders" from_column="user_id" 
+                  to_table="users" to_column="id" type="foreign_key" />
+  </relationships>
+</database></code></pre>
+                    </section>
+
+                    <section class="help-section-item">
+                        <h3>🔧 Features</h3>
+                        <ul>
+                            <li><strong>Interactive Diagrams:</strong> Drag and zoom relationship diagrams</li>
+                            <li><strong>Multiple Layouts:</strong> Force-directed, hierarchical, and circular layouts</li>
+                            <li><strong>Comprehensive Dictionary:</strong> Detailed table and column information</li>
+                            <li><strong>Export Options:</strong> HTML, PDF, PNG, and JSON formats</li>
+                            <li><strong>Search & Filter:</strong> Find tables and columns quickly</li>
+                            <li><strong>Responsive Design:</strong> Works on desktop and mobile devices</li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2024 Database Data Dictionary Tool | Built with D3.js</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <!-- Universal Tracker Integration -->
+    <script src="universal-tracker.js"></script>
+</body>
+</html>

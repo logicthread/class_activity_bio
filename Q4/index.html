@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<!-- HTML5 document declaration for modern web standards -->
+<html lang="en">
+<!-- Setting the document language to English for accessibility -->
+<head>
+    <!-- Meta tag for character encoding to support international characters -->
+    <meta charset="UTF-8">
+    <!-- Viewport meta tag for responsive design on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page title that appears in browser tab -->
+    <title>Stoplight Game - Nash Equilibrium Demonstration</title>
+    <!-- Link to external CSS stylesheet for styling -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Main container div to hold all game elements -->
+    <div class="container">
+        <!-- Header section with game title and description -->
+        <header>
+            <!-- Main heading for the game -->
+            <h1>Stoplight Game</h1>
+            <!-- Subtitle explaining the game theory concept -->
+            <h2>Nash Equilibrium Demonstration</h2>
+            <!-- Paragraph explaining the game concept -->
+            <p>Two players approach an intersection. Each must decide: Go or Stop?</p>
+        </header>
+
+        <!-- Game board section containing the visual representation -->
+        <div class="game-board">
+            <!-- Intersection visual representation -->
+            <div class="intersection">
+                <!-- Player 1 car positioned at the intersection -->
+                <div class="player player1" id="player1">
+                    <!-- Car emoji representing Player 1 (Human) -->
+                    <span class="car">🚗</span>
+                    <!-- Label identifying this as Player 1 -->
+                    <span class="player-label">Player 1 (Human)</span>
+                </div>
+                
+                <!-- Player 2 car positioned at the intersection -->
+                <div class="player player2" id="player2">
+                    <!-- Car emoji representing Player 2 (Computer) -->
+                    <span class="car">🚙</span>
+                    <!-- Label identifying this as Player 2 -->
+                    <span class="player-label">Player 2 (Computer)</span>
+                </div>
+                
+                <!-- Traffic light visual element -->
+                <div class="traffic-light">
+                    <!-- Red light circle -->
+                    <div class="light red" id="red-light"></div>
+                    <!-- Yellow light circle -->
+                    <div class="light yellow" id="yellow-light"></div>
+                    <!-- Green light circle -->
+                    <div class="light green" id="green-light"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Control panel for game interactions -->
+        <div class="controls">
+            <!-- Human player action buttons -->
+            <div class="player-controls">
+                <!-- Heading for human player controls -->
+                <h3>Your Choice:</h3>
+                <!-- Button for human player to choose "Go" -->
+                <button id="go-btn" class="action-btn go">Go</button>
+                <!-- Button for human player to choose "Stop" -->
+                <button id="stop-btn" class="action-btn stop">Stop</button>
+            </div>
+            
+            <!-- Button to start a new round with random computer choice -->
+            <button id="new-round-btn" class="new-round-btn">New Round</button>
+        </div>
+
+        <!-- Game information display section -->
+        <div class="game-info">
+            <!-- Current round information -->
+            <div class="round-info">
+                <!-- Display current round number -->
+                <h3>Round: <span id="round-number">1</span></h3>
+                <!-- Display current choices made by both players -->
+                <p>Player 1 Choice: <span id="p1-choice">-</span></p>
+                <p>Player 2 Choice: <span id="p2-choice">-</span></p>
+            </div>
+            
+            <!-- Payoff matrix explanation -->
+            <div class="payoff-matrix">
+                <!-- Heading for the payoff matrix -->
+                <h3>Payoff Matrix</h3>
+                <!-- Table showing all possible outcomes and their payoffs -->
+                <table>
+                    <!-- Table header row -->
+                    <tr>
+                        <!-- Empty cell for alignment -->
+                        <th></th>
+                        <!-- Column header for Player 2 Go choice -->
+                        <th>P2: Go</th>
+                        <!-- Column header for Player 2 Stop choice -->
+                        <th>P2: Stop</th>
+                    </tr>
+                    <!-- Row for Player 1 Go choice -->
+                    <tr>
+                        <!-- Row header for Player 1 Go choice -->
+                        <th>P1: Go</th>
+                        <!-- Payoff cell for both players choosing Go (collision) -->
+                        <td class="collision">(-10, -10)</td>
+                        <!-- Payoff cell for P1 Go, P2 Stop -->
+                        <td>(5, 0)</td>
+                    </tr>
+                    <!-- Row for Player 1 Stop choice -->
+                    <tr>
+                        <!-- Row header for Player 1 Stop choice -->
+                        <th>P1: Stop</th>
+                        <!-- Payoff cell for P1 Stop, P2 Go -->
+                        <td>(0, 5)</td>
+                        <!-- Payoff cell for both players choosing Stop -->
+                        <td>(1, 1)</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Results display section -->
+        <div class="results">
+            <!-- Heading for results section -->
+            <h3>Round Results</h3>
+            <!-- Paragraph to display the outcome of each round -->
+            <p id="result-text">Make your choice to start the game!</p>
+            <!-- Paragraph to display payoffs for both players -->
+            <p id="payoff-text"></p>
+        </div>
+
+        <!-- Score tracking section -->
+        <div class="scores">
+            <!-- Heading for scores section -->
+            <h3>Cumulative Scores</h3>
+            <!-- Display Player 1's total score -->
+            <p>Player 1 (Human): <span id="p1-score">0</span></p>
+            <!-- Display Player 2's total score -->
+            <p>Player 2 (Computer): <span id="p2-score">0</span></p>
+        </div>
+
+        <!-- Nash Equilibrium explanation section -->
+        <div class="nash-explanation">
+            <!-- Heading for Nash Equilibrium explanation -->
+            <h3>Nash Equilibrium Analysis</h3>
+            <!-- Paragraph explaining the Nash Equilibrium concept -->
+            <p>In this game, there are two pure Nash Equilibria:</p>
+            <!-- Unordered list of Nash Equilibrium strategies -->
+            <ul>
+                <!-- First Nash Equilibrium strategy -->
+                <li><strong>(Go, Stop)</strong>: Player 1 goes, Player 2 stops</li>
+                <!-- Second Nash Equilibrium strategy -->
+                <li><strong>(Stop, Go)</strong>: Player 1 stops, Player 2 goes</li>
+            </ul>
+            <!-- Additional explanation of Nash Equilibrium -->
+            <p>In these situations, neither player can improve their payoff by unilaterally changing their strategy.</p>
+        </div>
+    </div>
+
+    <!-- Script tag to include external JavaScript file -->
+    <script src="script.js"></script>
+    <!-- Universal Tracker Integration -->
+    <script src="universal-tracker.js"></script>
+</body>
+</html>
