@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="library_system" description="Library management system database">
+  <tables>
+    <table name="authors" type="table" description="Book authors information">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" auto_increment="true" description="Unique author identifier" />
+        <column name="first_name" type="VARCHAR(100)" nullable="false" description="Author first name" />
+        <column name="last_name" type="VARCHAR(100)" nullable="false" description="Author last name" />
+        <column name="birth_date" type="DATE" nullable="true" description="Author birth date" />
+        <column name="nationality" type="VARCHAR(50)" nullable="true" description="Author nationality" />
+        <column name="biography" type="TEXT" nullable="true" description="Author biography" />
+        <column name="created_at" type="TIMESTAMP" nullable="false" default="CURRENT_TIMESTAMP" description="Record creation timestamp" />
+      </columns>
+    </table>
+    
+    <table name="publishers" type="table" description="Book publishers information">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" auto_increment="true" description="Unique publisher identifier" />
+        <column name="name" type="VARCHAR(255)" nullable="false" description="Publisher name" />
+        <column name="address" type="TEXT" nullable="true" description="Publisher address" />
+        <column name="phone" type="VARCHAR(20)" nullable="true" description="Publisher phone number" />
+        <column name="email" type="VARCHAR(255)" nullable="true" description="Publisher email" />
+        <column name="website" type="VARCHAR(255)" nullable="true" description="Publisher website" />
+        <column name="established_year" type="YEAR" nullable="true" description="Year publisher was established" />
+      </columns>
+    </table>
+    
+    <table name="genres" type="table" description="Book genres/categories">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" auto_increment="true" description="Unique genre identifier" />
+        <column name="name" type="VARCHAR(100)" nullable="false" unique="true" description="Genre name" />
+        <column name="description" type="TEXT" nullable="true" description="Genre description" />
+      </columns>
+    </table>
+    
+    <table name="books" type="table" description="Book catalog">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" auto_increment="true" description="Unique book identifier" />
+        <column name="isbn" type="VARCHAR(20)" nullable="false" unique="true" description="International Standard Book Number" />
+        <column name="title" type="VARCHAR(500)" nullable="false" description="Book title" />
+        <column name="subtitle" type="VARCHAR(500)" nullable="true" description="Book subtitle" />
+        <column name="author_id" type="INT" nullable="false" foreign_key="true" description="Reference to primary author" />
+        <column name="publisher_id" type="INT" nullable="false" foreign_key="true" description="Reference to publisher" />
+        <column name="genre_id" type="INT" nullable="false" foreign_key="true" description="Reference to genre" />
+        <column name="publication_date" type="DATE" nullable="true" description="Book publication date" />
+        <column name="pages" type="INT" nullable="true" description="Number of pages" />
+        <column name="language" type="VARCHAR(10)" nullable="false" default="en" description="Book language code" />
+        <column name="summary" type="TEXT" nullable="true" description="Book summary" />
+        <column name="cover_image_url" type="VARCHAR(500)" nullable="true" description="Book cover image URL" />
+        <column name="price" type="DECIMAL(8,2)" nullable="true" description="Book price" />
+        <column name="available_copies" type="INT" nullable="false" default="0" description="Number of available copies" />
+        <column name="total_copies" type="INT" nullable="false" default="0" description="Total number of copies" />
+        <column name="created_at" type="TIMESTAMP" nullable="false" default="CURRENT_TIMESTAMP" description="Record creation timestamp" />
+        <column name="updated_at" type="TIMESTAMP" nullable="false" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" description="Last update timestamp" />
+      </columns>
+    </table>
+    
+    <table name="members" type="table" description="Library members">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" auto_increment="true" description="Unique member identifier" />
+        <column name="member_number" type="VARCHAR(20)" nullable="false" unique="true" description="Member card number" />
+        <column name="first_name" type="VARCHAR(100)" nullable="false" description="Member first name" />
+        <column name="last_name" type="VARCHAR(100)" nullable="false" description="Member last name" />
+        <column name="email" type="VARCHAR(255)" nullable="false" unique="true" description="Member email address" />
+        <column name="phone" type="VARCHAR(20)" nullable="true" description="Member phone number" />
+        <column name="address" type="TEXT" nullable="true" description="Member address" />
+        <column name="date_of_birth" type="DATE" nullable="true" description="Member date of birth" />
+        <column name="membership_type" type="ENUM('standard','premium','student','senior')" nullable="false" default="standard" description="Type of membership" />
+        <column name="membership_start_date" type="DATE" nullable="false" description="Membership start date" />
+        <column name="membership_end_date" type="DATE" nullable="false" description="Membership expiry date" />
+        <column name="status" type="ENUM('active','suspended','expired')" nullable="false" default="active" description="Member status" />
+        <column name="created_at" type="TIMESTAMP" nullable="false" default="CURRENT_TIMESTAMP" description="Record creation timestamp" />
+      </columns>
+    </table>
+    
+    <table name="loans" type="table" description="Book loan records">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" auto_increment="true" description="Unique loan identifier" />
+        <column name="book_id" type="INT" nullable="false" foreign_key="true" description="Reference to borrowed book" />
+        <column name="member_id" type="INT" nullable="false" foreign_key="true" description="Reference to borrowing member" />
+        <column name="loan_date" type="DATE" nullable="false" description="Date book was borrowed" />
+        <column name="due_date" type="DATE" nullable="false" description="Date book is due back" />
+        <column name="return_date" type="DATE" nullable="true" description="Actual return date" />
+        <column name="status" type="ENUM('active','returned','overdue','lost')" nullable="false" default="active" description="Loan status" />
+        <column name="fine_amount" type="DECIMAL(6,2)" nullable="false" default="0.00" description="Fine amount for overdue/lost books" />
+        <column name="notes" type="TEXT" nullable="true" description="Additional notes" />
+        <column name="created_at" type="TIMESTAMP" nullable="false" default="CURRENT_TIMESTAMP" description="Record creation timestamp" />
+      </columns>
+    </table>
+    
+    <table name="reservations" type="table" description="Book reservations">
+      <columns>
+        <column name="id" type="INT" nullable="false" primary_key="true" auto_increment="true" description="Unique reservation identifier" />
+        <column name="book_id" type="INT" nullable="false" foreign_key="true" description="Reference to reserved book" />
+        <column name="member_id" type="INT" nullable="false" foreign_key="true" description="Reference to member making reservation" />
+        <column name="reservation_date" type="DATE" nullable="false" description="Date reservation was made" />
+        <column name="expiry_date" type="DATE" nullable="false" description="Reservation expiry date" />
+        <column name="status" type="ENUM('active','fulfilled','expired','cancelled')" nullable="false" default="active" description="Reservation status" />
+        <column name="priority" type="INT" nullable="false" default="1" description="Reservation priority (queue position)" />
+        <column name="created_at" type="TIMESTAMP" nullable="false" default="CURRENT_TIMESTAMP" description="Record creation timestamp" />
+      </columns>
+    </table>
+    
+    <table name="book_authors" type="table" description="Many-to-many relationship between books and authors">
+      <columns>
+        <column name="book_id" type="INT" nullable="false" foreign_key="true" description="Reference to book" />
+        <column name="author_id" type="INT" nullable="false" foreign_key="true" description="Reference to author" />
+        <column name="role" type="ENUM('primary','co-author','editor','translator')" nullable="false" default="primary" description="Author role for this book" />
+      </columns>
+    </table>
+  </tables>
+  
+  <relationships>
+    <relationship from_table="books" from_column="author_id" to_table="authors" to_column="id" type="foreign_key" description="Book has primary author" />
+    <relationship from_table="books" from_column="publisher_id" to_table="publishers" to_column="id" type="foreign_key" description="Book published by publisher" />
+    <relationship from_table="books" from_column="genre_id" to_table="genres" to_column="id" type="foreign_key" description="Book belongs to genre" />
+    <relationship from_table="loans" from_column="book_id" to_table="books" to_column="id" type="foreign_key" description="Loan is for specific book" />
+    <relationship from_table="loans" from_column="member_id" to_table="members" to_column="id" type="foreign_key" description="Loan made by member" />
+    <relationship from_table="reservations" from_column="book_id" to_table="books" to_column="id" type="foreign_key" description="Reservation is for specific book" />
+    <relationship from_table="reservations" from_column="member_id" to_table="members" to_column="id" type="foreign_key" description="Reservation made by member" />
+    <relationship from_table="book_authors" from_column="book_id" to_table="books" to_column="id" type="foreign_key" description="Book-author relationship" />
+    <relationship from_table="book_authors" from_column="author_id" to_table="authors" to_column="id" type="foreign_key" description="Author-book relationship" />
+  </relationships>
+</database>
