@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bowling Game</title>
+    <!-- Include Three.js library directly -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.156.1/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        /* Inline styles to avoid CORS issues */
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background-color: #1a1a1a;
+        }
+
+        #canvas-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #game-ui {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            color: white;
+            z-index: 1;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            pointer-events: none;
+        }
+
+        #mode-selection {
+            text-align: center;
+            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            pointer-events: auto;
+        }
+
+        #mode-selection h2 {
+            color: #fff;
+            margin-bottom: 15px;
+        }
+
+        #mode-selection button {
+            margin: 0 10px;
+            padding: 12px 24px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+
+        #score-board {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            font-size: 18px;
+            pointer-events: auto;
+        }
+
+        #score-board > div {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            min-width: 120px;
+        }
+
+        #frames-display {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            gap: 10px;
+            overflow-x: auto;
+            pointer-events: auto;
+        }
+
+        .frame {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #4CAF50;
+            padding: 10px;
+            min-width: 80px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            pointer-events: auto;
+        }
+
+        #power-meter {
+            width: 250px;
+            height: 25px;
+            background: #222;
+            border: 3px solid #4CAF50;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        #power-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(to right, #4CAF50, #FFC107, #f44336);
+            transition: width 0.1s linear;
+            border-radius: 12px;
+        }
+
+        #direction-controls {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 20px;
+        }
+
+        #direction-controls button {
+            padding: 10px 25px;
+            font-size: 24px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        #throw-btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="canvas-container"></div>
+        <div id="game-ui">
+            <div id="mode-selection">
+                <h2>🎳 Select Game Mode</h2>
+                <button data-mode="singles">🎯 Traditional Singles</button>
+                <button data-mode="doubles">👥 Unified Doubles</button>
+                <button data-mode="team">👥👥 Unified Team</button>
+            </div>
+            <div id="score-board">
+                <div class="current-frame">
+                    <span>Frame</span>
+                    <span id="current-frame">1</span>/10
+                </div>
+                <div class="current-ball">
+                    <span>Ball</span>
+                    <span id="current-ball">1</span>
+                </div>
+                <div class="total-score">
+                    <span>Total Score</span>
+                    <span id="total-score">0</span>
+                </div>
+            </div>
+            <div id="frames-display"></div>
+            <div id="controls">
+                <div id="power-meter">
+                    <div id="power-bar"></div>
+                </div>
+                <div id="direction-controls">
+                    <button id="left-btn" title="Move Left">←</button>
+                    <button id="right-btn" title="Move Right">→</button>
+                </div>
+                <button id="throw-btn">🎳 Throw Ball</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game class implementation
+        class BowlingGame {
+            constructor() {
+                this.initThreeJS();
+                this.setupGame();
+                this.setupEventListeners();
+                this.animate();
+            }
+
+            initThreeJS() {
+                // Scene setup
+                this.scene = new THREE.Scene();
+                this.scene.background = new THREE.Color(0x87CEEB);
+                
+                // Camera setup
+                this.camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+                this.renderer = new THREE.WebGLRenderer({ antialias: true });
+                this.renderer.setSize(window.innerWidth, window.innerHeight);
+                this.renderer.shadowMap.enabled = true;
+                document.getElementById('canvas-container').appendChild(this.renderer.domElement);
+
+                // Lighting
+                const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+                this.scene.add(ambientLight);
+
+                const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
+                mainLight.position.set(0, 10, 5);
+                mainLight.castShadow = true;
+                mainLight.shadow.camera.near = 0.5;
+                mainLight.shadow.camera.far = 500;
+                mainLight.shadow.mapSize.width = 2048;
+                mainLight.shadow.mapSize.height = 2048;
+                mainLight.shadow.bias = -0.001;
+                this.scene.add(mainLight);
+
+                const spotLight = new THREE.SpotLight(0xffffff, 1);
+                spotLight.position.set(0, 8, -3);
+                spotLight.angle = Math.PI / 4;
+                spotLight.penumbra = 0.3;
+                spotLight.decay = 1;
+                spotLight.distance = 20;
+                this.scene.add(spotLight);
+
+                // Camera position
+                this.camera.position.set(0, 6, 10);
+                this.camera.lookAt(0, 0, -7);
+
+                // Controls
+                this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
+                this.controls.enablePan = false;
+                this.controls.enableZoom = true;
+                this.controls.minDistance = 8;
+                this.controls.maxDistance = 15;
+                this.controls.minPolarAngle = Math.PI / 6;
+                this.controls.maxPolarAngle = Math.PI / 2.5;
+                this.controls.target.set(0, 0, -7);
+            }
+
+            createLane() {
+                // Lane
+                const laneGeometry = new THREE.BoxGeometry(2, 0.1, 20);
+                const laneMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0x8b4513,
+                    shininess: 60
+                });
+                this.lane = new THREE.Mesh(laneGeometry, laneMaterial);
+                this.lane.receiveShadow = true;
+                this.scene.add(this.lane);
+
+                // Gutters
+                const gutterShape = new THREE.Shape();
+                gutterShape.moveTo(0, 0);
+                gutterShape.absarc(0.15, 0.15, 0.15, Math.PI, 0, false);
+                gutterShape.lineTo(0.3, 0);
+                const gutterGeometry = new THREE.ExtrudeGeometry(gutterShape, {
+                    depth: 20,
+                    bevelEnabled: false
+                });
+                const gutterMaterial = new THREE.MeshPhongMaterial({ color: 0x444444 });
+                
+                this.leftGutter = new THREE.Mesh(gutterGeometry, gutterMaterial);
+                this.leftGutter.position.set(-1.15, -0.15, -10);
+                this.scene.add(this.leftGutter);
+
+                this.rightGutter = new THREE.Mesh(gutterGeometry, gutterMaterial);
+                this.rightGutter.position.set(0.85, -0.15, -10);
+                this.scene.add(this.rightGutter);
+
+                // Foul line
+                const foulLineGeometry = new THREE.BoxGeometry(2, 0.01, 0.1);
+                const foulLineMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0xff0000,
+                    emissive: 0xff0000,
+                    emissiveIntensity: 0.5
+                });
+                this.foulLine = new THREE.Mesh(foulLineGeometry, foulLineMaterial);
+                this.foulLine.position.set(0, 0.06, 5);
+                this.scene.add(this.foulLine);
+            }
+
+            createPins() {
+                this.pins = [];
+                const pinBodyGeometry = new THREE.CylinderGeometry(0.08, 0.12, 0.4, 32);
+                const pinNeckGeometry = new THREE.CylinderGeometry(0.06, 0.08, 0.08, 32);
+                const pinHeadGeometry = new THREE.SphereGeometry(0.08, 32, 32);
+                const pinMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0xFFFFFF,
+                    shininess: 100
+                });
+
+                const positions = [
+                    [0, 0, -7],           // Pin 1
+                    [-0.3, 0, -7.4],      // Pin 2
+                    [0.3, 0, -7.4],       // Pin 3
+                    [-0.6, 0, -7.8],      // Pin 4
+                    [0, 0, -7.8],         // Pin 5
+                    [0.6, 0, -7.8],       // Pin 6
+                    [-0.9, 0, -8.2],      // Pin 7
+                    [-0.3, 0, -8.2],      // Pin 8
+                    [0.3, 0, -8.2],       // Pin 9
+                    [0.9, 0, -8.2]        // Pin 10
+                ];
+
+                positions.forEach((pos, index) => {
+                    const pinGroup = new THREE.Group();
+                    
+                    const pinBody = new THREE.Mesh(pinBodyGeometry, pinMaterial);
+                    const pinNeck = new THREE.Mesh(pinNeckGeometry, pinMaterial);
+                    const pinHead = new THREE.Mesh(pinHeadGeometry, pinMaterial);
+
+                    pinNeck.position.y = 0.24;
+                    pinHead.position.y = 0.35;
+
+                    pinGroup.add(pinBody);
+                    pinGroup.add(pinNeck);
+                    pinGroup.add(pinHead);
+
+                    pinGroup.position.set(pos[0], 0.2, pos[2]);
+                    pinGroup.scale.set(1.2, 1.2, 1.2);
+                    
+                    pinGroup.traverse((object) => {
+                        if (object instanceof THREE.Mesh) {
+                            object.castShadow = true;
+                            object.receiveShadow = true;
+                        }
+                    });
+
+                    pinGroup.isStanding = true;
+                    this.pins.push(pinGroup);
+                    this.scene.add(pinGroup);
+                });
+            }
+
+            createBall() {
+                const ballGeometry = new THREE.SphereGeometry(0.15, 32, 32);
+                const ballMaterial = new THREE.MeshPhongMaterial({ 
+                    color: 0x000000,
+                    shininess: 80
+                });
+                this.ball = new THREE.Mesh(ballGeometry, ballMaterial);
+                this.ball.castShadow = true;
+                this.resetBall();
+                this.scene.add(this.ball);
+
+                // Add finger holes
+                const holeGeometry = new THREE.SphereGeometry(0.03, 16, 16);
+                const holeMaterial = new THREE.MeshPhongMaterial({ color: 0x202020 });
+                
+                const hole1 = new THREE.Mesh(holeGeometry, holeMaterial);
+                hole1.position.set(0.06, 0.1, 0);
+                this.ball.add(hole1);
+
+                const hole2 = new THREE.Mesh(holeGeometry, holeMaterial);
+                hole2.position.set(-0.06, 0.1, 0);
+                this.ball.add(hole2);
+
+                const hole3 = new THREE.Mesh(holeGeometry, holeMaterial);
+                hole3.position.set(0, 0.1, 0.06);
+                this.ball.add(hole3);
+            }
+
+            setupGame() {
+                this.createLane();
+                this.createPins();
+                this.createBall();
+                this.gameState = {
+                    currentFrame: 1,
+                    currentBall: 1,
+                    scores: Array(10).fill().map(() => ({ first: null, second: null, third: null, total: 0 })),
+                    gameMode: 'singles',
+                    players: [],
+                    isThrowInProgress: false
+                };
+            }
+
+            setupEventListeners() {
+                const leftBtn = document.getElementById('left-btn');
+                const rightBtn = document.getElementById('right-btn');
+                
+                leftBtn.addEventListener('mousedown', () => this.startMovingBall('left'));
+                rightBtn.addEventListener('mousedown', () => this.startMovingBall('right'));
+                document.addEventListener('mouseup', () => this.stopMovingBall());
+                
+                const throwBtn = document.getElementById('throw-btn');
+                throwBtn.addEventListener('mousedown', () => this.startPowerMeter());
+                throwBtn.addEventListener('mouseup', () => this.throwBall());
+
+                document.querySelectorAll('#mode-selection button').forEach(button => {
+                    button.addEventListener('click', (e) => this.setGameMode(e.target.dataset.mode));
+                });
+
+                window.addEventListener('resize', () => {
+                    this.camera.aspect = window.innerWidth / window.innerHeight;
+                    this.camera.updateProjectionMatrix();
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            startMovingBall(direction) {
+                this.movingDirection = direction;
+                if (!this.moveInterval) {
+                    this.moveInterval = setInterval(() => this.adjustBallPosition(), 16);
+                }
+            }
+
+            stopMovingBall() {
+                if (this.moveInterval) {
+                    clearInterval(this.moveInterval);
+                    this.moveInterval = null;
+                }
+                this.movingDirection = null;
+            }
+
+            adjustBallPosition() {
+                if (!this.movingDirection || this.gameState.isThrowInProgress) return;
+                const moveAmount = this.movingDirection === 'left' ? -0.05 : 0.05;
+                if (Math.abs(this.ball.position.x + moveAmount) < 0.9) {
+                    this.ball.position.x += moveAmount;
+                }
+            }
+
+            startPowerMeter() {
+                if (this.gameState.isThrowInProgress) return;
+                
+                const powerBar = document.getElementById('power-bar');
+                let power = 0;
+                let increasing = true;
+
+                this.powerInterval = setInterval(() => {
+                    if (increasing) {
+                        power += 2;
+                        if (power >= 100) increasing = false;
+                    } else {
+                        power -= 2;
+                        if (power <= 0) increasing = true;
+                    }
+                    powerBar.style.width = power + '%';
+                    this.currentPower = power;
+                }, 20);
+            }
+
+            throwBall() {
+                if (this.gameState.isThrowInProgress) return;
+                
+                if (this.powerInterval) {
+                    clearInterval(this.powerInterval);
+                    this.powerInterval = null;
+                }
+
+                const power = Math.min((this.currentPower || 50) / 100, 1);
+                document.getElementById('power-bar').style.width = '0%';
+                
+                this.gameState.isThrowInProgress = true;
+                this.ball.velocity = new THREE.Vector3(0, 0, -0.3 * (0.5 + power));
+                const spin = this.ball.position.x * 0.1;
+                this.ball.velocity.x = spin;
+            }
+
+            resetBall() {
+                this.ball.position.set(0, 0.15, 5);
+                this.ball.velocity = new THREE.Vector3(0, 0, 0);
+            }
+
+            updateBall() {
+                if (!this.gameState.isThrowInProgress) return;
+
+                this.ball.position.add(this.ball.velocity);
+                this.ball.rotation.x -= this.ball.velocity.z * 0.5;
+                this.ball.velocity.multiplyScalar(0.995);
+
+                if (Math.abs(this.ball.position.x) > 0.9) {
+                    this.ball.position.x = Math.sign(this.ball.position.x) * 0.9;
+                    if (Math.abs(this.ball.velocity.x) > 0.01) {
+                        this.ball.velocity.x *= -0.5;
+                    }
+                }
+
+                if (this.ball.position.z < -10) {
+                    this.handleEndOfThrow();
+                    return;
+                }
+
+                this.checkPinCollisions();
+
+                if (Math.abs(this.ball.velocity.z) < 0.01) {
+                    this.handleEndOfThrow();
+                }
+            }
+
+            checkPinCollisions() {
+                this.pins.forEach(pin => {
+                    if (!pin.isStanding) return;
+
+                    const distance = this.ball.position.distanceTo(pin.position);
+                    if (distance < 0.25) {
+                        pin.isStanding = false;
+                        
+                        const fallDirection = Math.random() * Math.PI * 2;
+                        const fallSpeed = 0.1;
+                        
+                        const animate = () => {
+                            if (pin.rotation.z < Math.PI / 2) {
+                                pin.rotation.z += fallSpeed;
+                                pin.position.y = Math.cos(pin.rotation.z) * 0.15;
+                                requestAnimationFrame(animate);
+                            }
+                        };
+                        
+                        pin.position.x += Math.cos(fallDirection) * 0.2;
+                        pin.position.z += Math.sin(fallDirection) * 0.2;
+                        
+                        animate();
+                        this.ball.velocity.multiplyScalar(0.95);
+                    }
+                });
+            }
+
+            handleEndOfThrow() {
+                const knockedPins = this.pins.filter(pin => !pin.isStanding).length;
+                this.recordScore(knockedPins);
+                setTimeout(() => this.resetThrow(), 1500);
+            }
+
+            resetThrow() {
+                this.gameState.isThrowInProgress = false;
+                this.resetBall();
+                this.resetPins();
+            }
+
+            resetPins() {
+                this.pins.forEach(pin => {
+                    pin.isStanding = true;
+                    pin.position.y = 0.2;
+                    pin.rotation.z = 0;
+                });
+            }
+
+            recordScore(pins) {
+                const frame = this.gameState.scores[this.gameState.currentFrame - 1];
+                
+                if (this.gameState.currentBall === 1) {
+                    frame.first = pins;
+                    if (pins === 10) {
+                        frame.total = 10;
+                        this.advanceFrame();
+                    } else {
+                        this.gameState.currentBall = 2;
+                    }
+                } else {
+                    frame.second = pins;
+                    frame.total = (frame.first || 0) + pins;
+                    this.advanceFrame();
+                }
+
+                this.updateUI();
+            }
+
+            advanceFrame() {
+                if (this.gameState.currentFrame < 10) {
+                    this.gameState.currentFrame++;
+                    this.gameState.currentBall = 1;
+                } else {
+                    this.endGame();
+                }
+            }
+
+            updateUI() {
+                document.getElementById('current-frame').textContent = this.gameState.currentFrame;
+                document.getElementById('current-ball').textContent = this.gameState.currentBall;
+                
+                const totalScore = this.gameState.scores.reduce((sum, frame) => sum + frame.total, 0);
+                document.getElementById('total-score').textContent = totalScore;
+
+                const framesDisplay = document.getElementById('frames-display');
+                framesDisplay.innerHTML = this.gameState.scores.map((frame, i) => `
+                    <div class="frame">
+                        <div>Frame ${i + 1}</div>
+                        <div>${frame.first ?? '-'}|${frame.second ?? '-'}</div>
+                        <div>Total: ${frame.total}</div>
+                    </div>
+                `).join('');
+            }
+
+            setGameMode(mode) {
+                this.gameState.gameMode = mode;
+                this.gameState.players = [];
+                
+                switch(mode) {
+                    case 'singles':
+                        this.gameState.players.push({ name: 'Player 1', scores: [] });
+                        break;
+                    case 'doubles':
+                        this.gameState.players.push(
+                            { name: 'Athlete', scores: [] },
+                            { name: 'Partner', scores: [] }
+                        );
+                        break;
+                    case 'team':
+                        this.gameState.players.push(
+                            { name: 'Athlete 1', scores: [] },
+                            { name: 'Athlete 2', scores: [] },
+                            { name: 'Partner 1', scores: [] },
+                            { name: 'Partner 2', scores: [] }
+                        );
+                        break;
+                }
+                this.updateUI();
+            }
+
+            endGame() {
+                alert('Game Over! Final Score: ' + 
+                    this.gameState.scores.reduce((sum, frame) => sum + frame.total, 0));
+            }
+
+            animate() {
+                requestAnimationFrame(() => this.animate());
+                this.updateBall();
+                this.renderer.render(this.scene, this.camera);
+            }
+        }
+
+        // Start the game when the window loads
+        window.addEventListener('load', () => {
+            const game = new BowlingGame();
+        });
+    </script>
+</body>
+</html>

@@ -549,3 +549,7 @@ For support and questions, please open an issue in the project repository.
 ---
 
 **Happy Database Documentation! 📊**
+
+
+## Online Access
+The transformed website is accessible at `https://logicthread.github.io/class_activity_bio/Q5/`
